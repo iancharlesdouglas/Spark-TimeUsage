@@ -57,7 +57,8 @@ object TimeUsage {
       .option("header", "true")
       .load(fsPath(resource))
 
-    /*val data = rdd
+    /*Original code:
+    val data = rdd
         .mapPartitionsWithIndex((i, it) => if (i == 0) it.drop(1) else it) // skip the header line
         .map(_.split(",").to[List])
         .map(row)//.toJavaRDD()
@@ -266,24 +267,6 @@ object TimeUsage {
       .withColumn("age", new Column("age"))
 
     grouped.orderBy(col("working"), col("sex"), col("age"))
-    /*val schema = StructType(Seq(StructField("working", StringType), StructField("sex", StringType), StructField("age", StringType),
-      StructField("primaryNeeds", DoubleType), StructField("work", DoubleType), StructField("other", DoubleType)))
-
-    val x = spark.createDataFrame(grouped.as().toJavaRDD, schema)
-
-    val y = spark.createDataset(x.toJavaRDD)
-
-
-    //spark.sqlContext.applySchema(grouped, schema)
-
-    x.map {
-      case (((workKey, sexKey, ageKey)), prim, wrk, oth) => new TimeUsageRow(working = workKey,
-        sex = sexKey,
-        age = ageKey,
-        primaryNeeds = new BigDecimal(prim).setScale(1, BigDecimal.RoundingMode.HALF_UP).toDouble,
-        work = new BigDecimal(wrk).setScale(1, BigDecimal.RoundingMode.HALF_UP).toDouble,
-        other = new BigDecimal(oth).setScale(1, BigDecimal.RoundingMode.HALF_UP).toDouble)
-    }.orderBy(col("working"), col("sex"), col("age"))*/
   }
 }
 
